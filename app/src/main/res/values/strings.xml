@@ -5,4 +5,13 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+
+
+                                <!-- Drawers navBar -->
+
+
+    <string name="navigation_drawer_ingresos">Ingresos</string>
+
+
 </resources>
