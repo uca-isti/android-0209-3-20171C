@@ -3,6 +3,8 @@ package uca.apps.isi.nica_real;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,6 +14,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import uca.apps.isi.nica_real.fragment.Fragment_acercaDe;
+import uca.apps.isi.nica_real.fragment.Fragment_deducciones;
+import uca.apps.isi.nica_real.fragment.Fragment_feedback;
+import uca.apps.isi.nica_real.fragment.Fragment_home;
+import uca.apps.isi.nica_real.fragment.LocationFragment;
 
 public class Main2Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -78,21 +86,37 @@ public class Main2Activity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        Fragment fragment = null;
+        Class fragmentClass= null;
+
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+            fragmentClass = Fragment_home.class;
 
+        } else if (id == R.id.nav_gallery) {
+            fragmentClass = Fragment_deducciones.class;
         } else if (id == R.id.nav_slideshow) {
+            fragmentClass = Fragment_feedback.class;
 
         } else if (id == R.id.nav_manage) {
+            fragmentClass = Fragment_acercaDe.class;
 
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
         }
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
