@@ -94,10 +94,15 @@ public class Main2Activity extends AppCompatActivity
         if (id == R.id.nav_camera) {
             fragmentClass = Fragment_home.class;
 
-        } else if (id == R.id.nav_gallery) {
+
+        } else
+        if (id == R.id.nav_gallery) {
             fragmentClass = Fragment_deducciones.class;
         } else if (id == R.id.nav_slideshow) {
             fragmentClass = Fragment_feedback.class;
+
+        } else if (id == R.id.nav_inicio) {
+
 
         } else if (id == R.id.nav_manage) {
             fragmentClass = Fragment_acercaDe.class;
@@ -115,8 +120,6 @@ public class Main2Activity extends AppCompatActivity
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
