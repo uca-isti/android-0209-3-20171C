@@ -92,20 +92,20 @@ public class Main2Activity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            fragmentClass = Fragment_home.class;
 
+            fragmentClass = Fragment_deducciones.class;
 
         } else
         if (id == R.id.nav_gallery) {
-            fragmentClass = Fragment_deducciones.class;
-        } else if (id == R.id.nav_slideshow) {
             fragmentClass = Fragment_feedback.class;
 
-        } else if (id == R.id.nav_inicio) {
+        } else if (id == R.id.nav_slideshow) {
+            fragmentClass = Fragment_acercaDe.class;
 
+        } else if (id == R.id.nav_inicio) {
+            fragmentClass = Fragment_home.class;
 
         } else if (id == R.id.nav_manage) {
-            fragmentClass = Fragment_acercaDe.class;
 
         } else if (id == R.id.nav_share) {
 
