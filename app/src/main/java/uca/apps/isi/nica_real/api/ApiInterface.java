@@ -14,7 +14,7 @@ import uca.apps.isi.nica_real.Models.Categoria;
  * Created by isi3 on 17/4/2017.
  */
 
-public class ApiInterface {
+public interface ApiInterface {
     @GET("categorias")
     Call<List<Categoria>> getCategorias();
 
