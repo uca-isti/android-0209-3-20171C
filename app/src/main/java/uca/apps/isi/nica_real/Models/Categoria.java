@@ -6,14 +6,14 @@ package uca.apps.isi.nica_real.Models;
 
 public class Categoria {
 
-    private String nombreCategoria;
+    private String name;
 
-    public String getNombreCategoria() {
-        return text;
+    public String getName() {
+        return name;
     }
 
-    public void setNombreCategoria(String nombreCategoria) {
-        this.nombreCategoria = nombreCategoria;
+    public void setName(String nombreCategoria2) {
+        this.name = nombreCategoria2;
     }
 
 }

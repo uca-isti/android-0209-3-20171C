@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,6 +16,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.List;
+
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.Call;
+import retrofit2.Retrofit;
+import uca.apps.isi.nica_real.Models.Categoria;
+import uca.apps.isi.nica_real.api.Api;
+import uca.apps.isi.nica_real.api.ApiInterface;
 import uca.apps.isi.nica_real.fragment.Fragment_acercaDe;
 import uca.apps.isi.nica_real.fragment.Fragment_deducciones;
 import uca.apps.isi.nica_real.fragment.Fragment_feedback;
@@ -23,7 +34,7 @@ import uca.apps.isi.nica_real.fragment.LocationFragment;
 
 public class Main2Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    private final static String TAG = "Main2Activity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +59,56 @@ public class Main2Activity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Api.getBase())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        ApiInterface apiInterface = retrofit.create(ApiInterface.class);
+
+        Categoria categoria = new Categoria();
+        categoria.setName("Ingresos");
+
+        Call<Categoria> tweetCall = apiInterface.createCategoria(categoria);
+        tweetCall.enqueue(new Callback<Categoria>() {
+            @Override
+            public void onResponse(Call<Categoria> call, Response<Categoria> response) {
+
+                Log.i(TAG, response.body().getName());
+            }
+
+            @Override
+            public void onFailure(Call<Categoria> call, Throwable t) {
+
+            }
+        });
+
+        //Log.i(TAG,  apiInterface.getTweets().request().url().toString());
+
+        Call<List<Categoria>> call = apiInterface.getCategorias();
+        call.enqueue(new Callback<List<Categoria>>() {
+            @Override
+            public void onResponse(Call<List<Categoria>> call, Response<List<Categoria>> response) {
+
+
+                if(response != null) {
+
+                    for(Categoria categoria : response.body()) {
+
+                        Log.i(TAG,"" +categoria.getName());
+                    }
+                } else {
+                    Log.i(TAG, "Response es nulo");
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Categoria>> call, Throwable t) {
+                Log.i(TAG, t.getMessage());
+            }
+        });
     }
 
     @Override
