@@ -15,9 +15,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmModel;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -32,33 +37,37 @@ import uca.apps.isi.nica_real.fragment.Fragment_feedback;
 import uca.apps.isi.nica_real.fragment.Fragment_home;
 import uca.apps.isi.nica_real.fragment.LocationFragment;
 
-public class Main2Activity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private final static String TAG = "Main2Activity";
+    private EditText nombre;
+    private EditText id;
+    private Button guardar;
+    private final static String TAG = "MainActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        Realm.init(this);
+        setContentView(R.layout.activity_main);
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
+//
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawer.setDrawerListener(toggle);
+//        toggle.syncState();
+//
+//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+//        navigationView.setNavigationItemSelectedListener(this);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Api.getBase())
@@ -67,22 +76,22 @@ public class Main2Activity extends AppCompatActivity
 
         ApiInterface apiInterface = retrofit.create(ApiInterface.class);
 
-        Categoria categoria = new Categoria();
-        categoria.setName("Ingresos");
+//        Categoria categoria = new Categoria();
+//        categoria.setName("Ingresos");
 
-        Call<Categoria> tweetCall = apiInterface.createCategoria(categoria);
-        tweetCall.enqueue(new Callback<Categoria>() {
-            @Override
-            public void onResponse(Call<Categoria> call, Response<Categoria> response) {
-
-                Log.i(TAG, response.body().getName());
-            }
-
-            @Override
-            public void onFailure(Call<Categoria> call, Throwable t) {
-
-            }
-        });
+//        Call<Categoria> tweetCall = apiInterface.createCategoria(categoria);
+//        tweetCall.enqueue(new Callback<Categoria>() {
+//            @Override
+//            public void onResponse(Call<Categoria> call, Response<Categoria> response) {
+//
+//                Log.i(TAG, response.body().getName());
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Categoria> call, Throwable t) {
+//
+//            }
+//        });
 
         //Log.i(TAG,  apiInterface.getTweets().request().url().toString());
 
@@ -110,6 +119,44 @@ public class Main2Activity extends AppCompatActivity
             }
         });
     }
+    private void initViews() {
+        nombre = (EditText) findViewById(R.id.nombreCategoria);
+        id = (EditText) findViewById(R.id.idCategoria);
+        guardar = (Button) findViewById(R.id.btnGuardar);
+
+        guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                save();
+                finish();
+            }
+        });
+    }
+    private boolean validate() {
+        boolean success = false;
+        if(nombre.getText().toString().isEmpty()) {
+            Toast.makeText(getApplicationContext(), "Debe ingresar un nombre", Toast.LENGTH_LONG).show();
+        } else if(id.getText().toString().isEmpty()) {
+            Toast.makeText(getApplicationContext(), "Debe ingresar un id", Toast.LENGTH_LONG).show();
+        } else {
+            success = true;
+        }
+
+        return success;
+    }
+
+    private void save() {
+        if (validate()) {
+            Realm realm = Realm.getDefaultInstance();
+
+            realm.beginTransaction();
+            Categoria categoria = realm.createObject(Categoria.class);
+            categoria.setName(nombre.getText().toString());
+            categoria.setId_Categoria(Integer.parseInt(String.valueOf(id.getText())));
+            realm.commitTransaction();
+        }
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -176,7 +223,7 @@ public class Main2Activity extends AppCompatActivity
         try {
             fragment = (Fragment) fragmentClass.newInstance();
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+//            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
         } catch (Exception e) {
             e.printStackTrace();
